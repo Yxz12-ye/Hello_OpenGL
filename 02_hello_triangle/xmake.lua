@@ -1,0 +1,5 @@
+target("02")
+    set_kind("binary")
+    add_files("homework/two_shader.cpp")
+    add_packages("glfw")
+    add_packages("glad")
