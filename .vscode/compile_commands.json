@@ -1,0 +1,6 @@
+[
+{
+  "directory": "d:\\Code\\Cpp\\OpenGL",
+  "arguments": ["D:\\Software\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\cl.exe", "/c", "/nologo", "/MD", "/O2", "/DGLFW_INCLUDE_NONE", "/EHsc", "/IC:\\Users\\30789\\AppData\\Local\\.xmake\\packages\\g\\glfw\\3.4\\c2e2775efece4df3813d55e1f8af87ab\\include", "/DNDEBUG", "/Fobuild\\.objs\\01\\windows\\x64\\release\\01_first_window\\main.cpp.obj", "01_first_window\\main.cpp", "-imsvc", "D:\\Software\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include", "-imsvc", "D:\\Software\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\ATLMFC\\include", "-imsvc", "D:\\Software\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\VS\\include", "-imsvc", "D:\\Windows Kits\\10\\include\\10.0.26100.0\\ucrt", "-imsvc", "D:\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\um", "-imsvc", "D:\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\shared", "-imsvc", "D:\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\winrt", "-imsvc", "D:\\Windows Kits\\10\\\\include\\10.0.26100.0\\\\cppwinrt", "-imsvc", "C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8\\include\\um"],
+  "file": "01_first_window\\main.cpp"
+}]

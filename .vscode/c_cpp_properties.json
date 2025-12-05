@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "includePath": [
+                "C:\\Users\\30789\\AppData\\Local\\.xmake\\packages\\g\\glfw\\3.4\\c2e2775efece4df3813d55e1f8af87ab\\include",
+                "C:\\Users\\30789\\AppData\\Local\\.xmake\\packages\\g\\glad\\v0.1.36\\6d8474ff942f4aaa8c80f75afca8230f\\include"
+            ],
+            "intelliSenseMode": "windows-msvc-x64",
+            "compilerPath": "msvc",
+            "cStandard": "c17",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
+}
