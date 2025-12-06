@@ -51,6 +51,27 @@ const char *fragmentShaderSource2 = "#version 330 core\n"
                                     "   FragColor = vec4(0.2f, 0.5f, 1.0f, 1.0f);\n"
                                     "}\n\0";
 
+unsigned int createShaderProgram(const char *vertexSource, const char *fragmentSource)
+{
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexSource, nullptr);
+    glCompileShader(vertexShader);
+
+    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentSource, nullptr);
+    glCompileShader(fragmentShader);
+
+    unsigned int shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    return shaderProgram;
+}
+
 int main()
 {
     // Initialize GLFW
@@ -80,39 +101,8 @@ int main()
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // Build and compile the first shader program
-    unsigned int vertexShader1 = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader1, 1, &vertexShaderSource1, nullptr);
-    glCompileShader(vertexShader1);
-
-    unsigned int fragmentShader1 = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader1, 1, &fragmentShaderSource1, nullptr);
-    glCompileShader(fragmentShader1);
-
-    unsigned int shaderProgram1 = glCreateProgram();
-    glAttachShader(shaderProgram1, vertexShader1);
-    glAttachShader(shaderProgram1, fragmentShader1);
-    glLinkProgram(shaderProgram1);
-
-    glDeleteShader(vertexShader1);
-    glDeleteShader(fragmentShader1);
-
-    // Build and compile the second shader program
-    unsigned int vertexShader2 = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader2, 1, &vertexShaderSource2, nullptr);
-    glCompileShader(vertexShader2);
-
-    unsigned int fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader2, 1, &fragmentShaderSource2, nullptr);
-    glCompileShader(fragmentShader2);
-
-    unsigned int shaderProgram2 = glCreateProgram();
-    glAttachShader(shaderProgram2, vertexShader2);
-    glAttachShader(shaderProgram2, fragmentShader2);
-    glLinkProgram(shaderProgram2);
-
-    glDeleteShader(vertexShader2);
-    glDeleteShader(fragmentShader2);
+    unsigned int shaderProgram1 = createShaderProgram(vertexShaderSource1, fragmentShaderSource1);
+    unsigned int shaderProgram2 = createShaderProgram(vertexShaderSource2, fragmentShaderSource2);
 
     unsigned int VBO, VAO, VBO2, VAO2;
     glGenVertexArrays(1, &VAO);
