@@ -7,7 +7,7 @@
 #include <sstream>
 #include <iostream>
 
-struct Triangle
+struct Shape
 {
     unsigned int VAO;
     unsigned int shaderProgram;
@@ -26,7 +26,7 @@ private:
     unsigned int createShaderProgram(const char *vertexPath, const char *fragmentPath);
     GLFWwindow *m_window;
 
-    std::vector<Triangle> m_triangles;
+    std::vector<Shape> m_triangles;
 
 public:
     MainWindow(int width, int height, const char *title);

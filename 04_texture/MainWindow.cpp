@@ -1,3 +1,4 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "MainWindow.h"
 
 bool MainWindow::Init()
@@ -119,6 +120,10 @@ int MainWindow::run()
 
         for (const auto &triangle : m_triangles)
         {
+            if (triangle.texture)
+            {
+                glBindTexture(GL_TEXTURE_2D, triangle.texture);
+            }
             glUseProgram(triangle.shaderProgram);
             glBindVertexArray(triangle.VAO);
             glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -134,7 +139,43 @@ int MainWindow::run()
     return 0;
 }
 
-void MainWindow::addTraiangle(float *vertices, Mode mode, const char *vertexShaderSource, const char *fragmentShaderSource)
+unsigned int MainWindow::loadTexture(const char *texturePath)
+{
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load(texturePath, &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrChannels == 1)
+            format = GL_RED;
+        else if (nrChannels == 3)
+            format = GL_RGB;
+        else if (nrChannels == 4)
+            format = GL_RGBA;
+
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+    return texture;
+}
+
+void MainWindow::addTriangle(float *vertices, Mode mode, const char *vertexShaderSource, const char *fragmentShaderSource)
 {
     unsigned int shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
 
@@ -158,9 +199,62 @@ void MainWindow::addTraiangle(float *vertices, Mode mode, const char *vertexShad
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
     }
+    else if (mode == POSITION_COLOR_TEXTURE)
+    {
+        return;
+    }
 
-    Triangle triangle;
+    Shape triangle;
     triangle.VAO = VAO;
     triangle.shaderProgram = shaderProgram;
+    m_triangles.push_back(triangle);
+}
+
+void MainWindow::addTriangle(float *vertices, Mode mode, const char *vertexShaderSource, const char *fragmentShaderSource, const char *texturePath)
+{
+    unsigned int shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
+    unsigned int texture = loadTexture(texturePath);
+
+    if (texture == 0)
+    {
+        return;
+    }
+
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    if (mode == ONLY_POSITION)
+    {
+        glBufferData(GL_ARRAY_BUFFER, 3 * 3 * sizeof(float), vertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+        glEnableVertexAttribArray(0);
+    }
+    else if (mode == POSITION_COLOR)
+    {
+        glBufferData(GL_ARRAY_BUFFER, 3 * 6 * sizeof(float), vertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+    }
+    else if (mode == POSITION_COLOR_TEXTURE)
+    {
+        glBufferData(GL_ARRAY_BUFFER, 3 * 8 * sizeof(float), vertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+    }
+
+    Shape triangle;
+    triangle.VAO = VAO;
+    triangle.shaderProgram = shaderProgram;
+    triangle.texture = texture;
+    triangle.EBO = 0;
     m_triangles.push_back(triangle);
 }

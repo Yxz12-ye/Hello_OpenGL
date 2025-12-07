@@ -159,7 +159,7 @@ void MainWindow::addTraiangle(float *vertices, Mode mode, const char *vertexShad
         glEnableVertexAttribArray(1);
     }
 
-    Triangle triangle;
+    Shape triangle;
     triangle.VAO = VAO;
     triangle.shaderProgram = shaderProgram;
     m_triangles.push_back(triangle);
