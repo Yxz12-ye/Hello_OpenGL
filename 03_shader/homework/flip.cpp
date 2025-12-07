@@ -13,6 +13,6 @@ float vertices[] = {
 int main()
 {
     MainWindow window(800, 600, "LearnOpenGL");
-    window.addTraiangle(vertices, POSITION_COLOR, "D:\\Code\\Cpp\\OpenGL\\03_shader\\shader\\flip_shader.vs", "D:\\Code\\Cpp\\OpenGL\\03_shader\\shader\\my_shader.fs");
+    window.addTraiangle(vertices, POSITION_COLOR, "D:\\Code\\Cpp\\OpenGL\\03_shader\\shader\\move_shader.vs", "D:\\Code\\Cpp\\OpenGL\\03_shader\\shader\\my_shader.fs");
     return window.run();
 }

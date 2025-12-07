@@ -1,5 +1,5 @@
 target("03")
     set_kind("binary")
-    add_files("main.cpp","MainWindow.cpp")
+    add_files("homework/flip.cpp","homework/MainWindow.cpp")
     add_packages("glfw")
     add_packages("glad")
